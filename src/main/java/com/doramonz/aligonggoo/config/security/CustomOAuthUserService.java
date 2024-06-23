@@ -20,10 +20,12 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         if(userRequest.getClientRegistration().getRegistrationId().equals("kakao")){
-            String id = Long.toString(oAuth2User.getAttribute("id"));
+            String id = "kakao_" + oAuth2User.getAttribute("id");
             if(!userService.existUser(id)){
                 User user = userService.createUser(id);
                 oAuth2User = new CustomUser(user.getId());
+            }else{
+                oAuth2User = new CustomUser(id);
             }
         }
 

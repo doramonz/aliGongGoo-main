@@ -11,11 +11,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.formLogin(AbstractHttpConfigurer::disable);
-        http.oauth2Login(oauth->oauth.successHandler((request, response, authentication) -> {
+        http.formLogin(AbstractHttpConfigurer::disable).logout(logout -> logout.logoutSuccessUrl("/index"));
+        http.oauth2Login(oauth -> oauth.successHandler((request, response, authentication) -> {
             response.sendRedirect("/index");
-        }));
-//        http.oauth2Login().serv
+        }).loginPage("/login"));
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+        http.csrf(csrf -> csrf.disable());
         return http.build();
     }
 }

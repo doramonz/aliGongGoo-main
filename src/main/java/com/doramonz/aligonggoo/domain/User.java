@@ -22,4 +22,5 @@ public class User {
 
     @Column(name = "user_loginAt")
     private LocalDateTime loginAt;
+
 }
