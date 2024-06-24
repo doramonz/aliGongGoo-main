@@ -6,4 +6,6 @@ public interface UserService {
     boolean existUser(String id);
 
     User createUser(String id);
+
+    void updateLastLogin(String id);
 }

@@ -2,6 +2,7 @@ package com.doramonz.aligonggoo.config.batch;
 
 import com.doramonz.aligonggoo.util.AliProductUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -15,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class UpdateStateStep {
@@ -48,6 +50,7 @@ public class UpdateStateStep {
         return items -> {
             for (Integer item : items) {
                 if (item != null) {
+                    log.debug("Close Expired ProductGongGooBatchDao. id: {}", item);
                     dataSource.getConnection().prepareStatement("UPDATE product_gongGoo SET gongGoo_status = 0 WHERE product_gongGoo_id = " + item).execute();
                 }
             }

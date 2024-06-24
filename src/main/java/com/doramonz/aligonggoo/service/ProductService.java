@@ -13,4 +13,8 @@ public interface ProductService {
     DefaultResponse<Void> uploadProduct(String userId, String url) throws DefaultError;
 
     DefaultResponse<UrlResponse> getGongGooUrl(int productId) throws DefaultError;
+
+    DefaultResponse<Void> deleteGongGoo(int productGongGooId) throws DefaultError;
+
+    DefaultResponse<ProductResponse> getRecentProduct(Pageable pageable);
 }

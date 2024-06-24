@@ -19,4 +19,5 @@ public interface ProductGongGooRepository extends JpaRepository<ProductGongGoo, 
     @Modifying
     @Query("update ProductGongGoo pgg set pgg.status = :b where pgg.id = :id")
     void updateStatus(int id, boolean b);
+
 }

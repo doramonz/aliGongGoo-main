@@ -27,6 +27,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
             }else{
                 oAuth2User = new CustomUser(id);
             }
+            userService.updateLastLogin(id);
         }
 
         return oAuth2User;

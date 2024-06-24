@@ -1,9 +1,9 @@
 ### Search Product
-GET http://localhost:8080/api/products/search?name=오아
+GET http://localhost:8080/api/products/search?name=육개
 
-### Update Product
-POST http://localhost:8080/api/products/upload?url=https%3A%2F%2Fwww.aliexpress.com%2Fgcp%2F300001014%2Fkrgroupbuy-share%3FshareGroupCode%3DSGC_6re466O565Scc3lrMA%26invitationCode%3DdDljSzRDZTFPYXloNXJSZG1YOTVNa0ZUN3N5enlJakZkYWdyTi9sUGtDTU5DcjZTcndBcUVRPT0%26disableNav%3DYES%26_immersiveMode%3Dtrue%26isSmbAutoCall%3Dfalse%26srcSns%3Dsns_Copy%26pha_manifest%3Dssr%26spreadType%3DpaidShare01%26bizType%3Dsharegroup%26social_params%3D6000117495799%26spreadCode%3DdDljSzRDZTFPYXloNXJSZG1YOTVNa0ZUN3N5enlJakZkYWdyTi9sUGtDTU5DcjZTcndBcUVRPT0%26isSmbShow%3Dfalse%26aff_fcid%3D0315c3cb9cae4e24b5ccf868382a4123-1719127364316-05503-_oBuYXrk%26tt%3DMG%26aff_fsk%3D_oBuYXrk%26aff_platform%3Ddefault%26sk%3D_oBuYXrk%26aff_trace_key%3D0315c3cb9cae4e24b5ccf868382a4123-1719127364316-05503-_oBuYXrk%26shareId%3D6000117495799%26businessType%3Dsharegroup%26platform%3DAE%26terminal_id%3Df316976369734e3aba990c79a22719b1
-Cookie: JSESSIONID=E60FA65BDA2A7E1D92FD9F31673E0503
+### Upload Product
+POST http://localhost:8080/api/products/upload?url=https%3A%2F%2Fa.aliexpress.com%2F_olYIyYK
+Cookie: JSESSIONID=71835B083B42E879BBED41E3ECEB9150
 
 ### Get opend url
-GET http://localhost:8080/api/products/opened?productId=1
+GET http://localhost:8080/api/products/opened?productId=14

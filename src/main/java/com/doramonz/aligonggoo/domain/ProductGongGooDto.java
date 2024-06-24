@@ -1,4 +1,4 @@
-package com.doramonz.aligonggoo.config.batch;
+package com.doramonz.aligonggoo.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,9 +7,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-public class ProductGongGooBatchDao {
+public class ProductGongGooDto {
     private int id;
+    private String name;
     private String url;
-    private boolean status;
     private LocalDateTime created;
+    private boolean status;
 }

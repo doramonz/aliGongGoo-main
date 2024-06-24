@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -101,12 +100,17 @@ public class DefaultProductService implements ProductService {
     @Override
     @Transactional
     public DefaultResponse<UrlResponse> getGongGooUrl(int productId) throws DefaultError {
-        productRepository.findById(productId).orElseThrow(() -> new DefaultError("상품을 찾을 수 없습니다.", 404));
+        if (!productRepository.existsById(productId)) {
+            throw new DefaultError("상품을 찾을 수 없습니다.", 404);
+        }
         List<ProductGongGooDao> gongGooList = productGongGooRepository.getOpenedProductGongGooList(productId);
         CopyOnWriteArrayList<Integer> closedGongGooList = new CopyOnWriteArrayList<>();
 
         gongGooList.forEach(gongGoo -> {
             try {
+                if (gongGoo.getCreated().plusDays(1).isBefore(LocalDateTime.now())) {
+                    throw new DefaultError("공구가 종료되었습니다.", 404);
+                }
                 aliProductUtil.getProductInfo(gongGoo.getUrl());
             } catch (DefaultError e) {
                 closedGongGooList.add(gongGoo.getId());
@@ -124,6 +128,30 @@ public class DefaultProductService implements ProductService {
         }
         return DefaultResponse.<UrlResponse>builder()
                 .data(List.of(new UrlResponse(url)))
+                .status(200)
+                .message("Success")
+                .build();
+    }
+
+    @Override
+    public DefaultResponse<Void> deleteGongGoo(int productGongGooId) throws DefaultError {
+        ProductGongGoo productGongGoo = productGongGooRepository.findById(productGongGooId)
+                .orElseThrow(() -> new DefaultError("공구를 찾을 수 없습니다.", 404));
+        productGongGooRepository.delete(productGongGoo);
+        return DefaultResponse.<Void>builder()
+                .status(200)
+                .message("Success")
+                .build();
+    }
+
+    @Override
+    public DefaultResponse<ProductResponse> getRecentProduct(Pageable pageable) {
+        Page<ProductResponse> products = productRepository.getOpenedProductGongGooListRecent(pageable);
+        return DefaultResponse.<ProductResponse>builder()
+                .data(products.getContent())
+                .total(products.getTotalElements())
+                .size(products.getSize())
+                .page(products.getNumber())
                 .status(200)
                 .message("Success")
                 .build();
