@@ -6,9 +6,9 @@
     <div class="container-fluid full-height d-flex justify-content-center align-items-center">
         <div class="row search-container" style="width: 100%">
             <div class="col-12">
-                <form class="d-flex w-100">
+                <form class="d-flex w-100" th:action="@{/products/search}" method="post">
                     <input class="form-control flex-grow-1" type="search" placeholder="입력" aria-label="Search"
-                           id="search-input">
+                           id="search-input" name="name" required/>
                     <button class="btn btn-outline-success ml-2" type="submit" id="search-button">Search</button>
                 </form>
             </div>
@@ -28,13 +28,15 @@
                             </div>
                         </div>
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{'/product/' + ${product.id}}">이동하기</a>
-                            </div>
+                            <button class="btn btn-outline-dark mt-auto getUri_button"
+                                    th:attr="productId=${product.id}">공구 조회
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    <script src="/js/index.js"></script>
 </th:block>
 </html>

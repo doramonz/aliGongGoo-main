@@ -17,8 +17,9 @@ import java.time.LocalDateTime;
 public class ProductGongGoo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_gongGoo_id")
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -32,10 +33,10 @@ public class ProductGongGoo {
     private String url;
 
     @Column(name = "gongGoo_price")
-    private int price;
+    private Integer price;
 
     @Column(name = "gongGoo_status")
-    private boolean status;
+    private Boolean status;
 
     @Column(name = "gongGoo_created")
     private LocalDateTime created;

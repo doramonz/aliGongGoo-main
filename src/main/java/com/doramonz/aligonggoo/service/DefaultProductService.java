@@ -1,18 +1,13 @@
 package com.doramonz.aligonggoo.service;
 
 import com.doramonz.aligonggoo.dao.ProductGongGooDao;
-import com.doramonz.aligonggoo.domain.Product;
 import com.doramonz.aligonggoo.domain.ProductGongGoo;
-import com.doramonz.aligonggoo.dto.DefaultError;
-import com.doramonz.aligonggoo.dto.DefaultResponse;
-import com.doramonz.aligonggoo.dto.ProductResponse;
-import com.doramonz.aligonggoo.dto.UrlResponse;
+import com.doramonz.aligonggoo.dto.*;
+import com.doramonz.aligonggoo.mq.OutputRabbitMQ;
 import com.doramonz.aligonggoo.repository.GongGooAvailRepository;
 import com.doramonz.aligonggoo.repository.ProductGongGooRepository;
 import com.doramonz.aligonggoo.repository.ProductRepository;
 import com.doramonz.aligonggoo.repository.UserRepository;
-import com.doramonz.aligonggoo.util.AliProductInfo;
-import com.doramonz.aligonggoo.util.AliProductUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +23,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Service("productService")
 public class DefaultProductService implements ProductService {
 
-    private final AliProductUtil aliProductUtil;
     private final ProductRepository productRepository;
     private final ProductGongGooRepository productGongGooRepository;
     private final UserRepository userRepository;
     private final GongGooAvailRepository gongGooAvailRepository;
+    private final OutputRabbitMQ outputRabbitMQ;
 
     @Override
     public DefaultResponse<ProductResponse> searchProduct(String name, Pageable pageable) {
@@ -50,50 +45,65 @@ public class DefaultProductService implements ProductService {
     @Override
     @Transactional
     public DefaultResponse<Void> uploadProduct(String userId, String url) throws DefaultError {
-        AliProductInfo productInfo = aliProductUtil.getProductInfo(url);
+//        AliProductInfo productInfo = aliProductUtil.getProductInfo(url);
+
+        if(!(url.startsWith("https://www.aliexpress.com") || url.startsWith("https://a.aliexpress.com"))) {
+            throw new DefaultError("올바르지 않은 URL입니다.", 400);
+        }
         DefaultResponse<Void> response;
 
         Optional<ProductGongGoo> findGongGoo = productGongGooRepository.findByUrl(url);
         if (findGongGoo.isPresent()) {
-            return DefaultResponse.<Void>builder()
-                    .status(400)
-                    .message("이미 등록된 공구입니다.")
-                    .build();
+            throw new DefaultError("이미 등록된 공구입니다.", 400);
         }
 
-        Optional<Product> find = productRepository.findByName(productInfo.getTitle());
+//        Optional<Product> find = productRepository.findByName(productInfo.getTitle());
 
-        if (find.isEmpty()) {
-            Product product = productRepository.save(Product.builder()
-                    .name(productInfo.getTitle())
-                    .image(productInfo.getImage())
-                    .build());
-            productGongGooRepository.save(ProductGongGoo.builder()
-                    .product(product)
-                    .user(userRepository.getReferenceById(userId))
-                    .url(url)
-                    .price(productInfo.getPrice())
-                    .status(true)
-                    .created(LocalDateTime.now().withNano(0))
-                    .build());
-            response = DefaultResponse.<Void>builder()
-                    .status(201)
-                    .message("Created")
-                    .build();
-        } else {
-            productGongGooRepository.save(ProductGongGoo.builder()
-                    .product(find.get())
-                    .user(userRepository.getReferenceById(userId))
-                    .url(url)
-                    .price(productInfo.getPrice())
-                    .status(true)
-                    .created(LocalDateTime.now().withNano(0))
-                    .build());
-            response = DefaultResponse.<Void>builder()
-                    .status(200)
-                    .message("Success")
-                    .build();
-        }
+//        if (find.isEmpty()) {
+//            Product product = productRepository.save(Product.builder()
+//                    .name(productInfo.getTitle())
+//                    .image(productInfo.getImage())
+//                    .build());
+//            productGongGooRepository.save(ProductGongGoo.builder()
+//                    .product(product)
+//                    .user(userRepository.getReferenceById(userId))
+//                    .url(url)
+//                    .price(productInfo.getPrice())
+//                    .status(true)
+//                    .created(LocalDateTime.now().withNano(0))
+//                    .build());
+//            response = DefaultResponse.<Void>builder()
+//                    .status(201)
+//                    .message("Created")
+//                    .build();
+//        } else {
+//            productGongGooRepository.save(ProductGongGoo.builder()
+//                    .product(find.get())
+//                    .user(userRepository.getReferenceById(userId))
+//                    .url(url)
+//                    .price(productInfo.getPrice())
+//                    .status(true)
+//                    .created(LocalDateTime.now().withNano(0))
+//                    .build());
+//            response = DefaultResponse.<Void>builder()
+//                    .status(200)
+//                    .message("Success")
+//                    .build();
+//        }
+        productGongGooRepository.save(ProductGongGoo.builder()
+                .user(userRepository.getReferenceById(userId))
+                .url(url)
+                .status(true)
+                .created(LocalDateTime.now().withNano(0))
+                .build());
+
+        outputRabbitMQ.sendURLParsingRequest(new URLParsingDto(url));
+
+        response = DefaultResponse.<Void>builder()
+                .status(200)
+                .message("Success")
+                .build();
+
         return response;
     }
 
@@ -111,7 +121,7 @@ public class DefaultProductService implements ProductService {
                 if (gongGoo.getCreated().plusDays(1).isBefore(LocalDateTime.now())) {
                     throw new DefaultError("공구가 종료되었습니다.", 404);
                 }
-                aliProductUtil.getProductInfo(gongGoo.getUrl());
+//                aliProductUtil.getProductInfo(gongGoo.getUrl());
             } catch (DefaultError e) {
                 closedGongGooList.add(gongGoo.getId());
             }

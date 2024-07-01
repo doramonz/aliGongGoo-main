@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -18,14 +19,15 @@ public class DefaultController {
 
     @GetMapping("/")
     public String home() {
-        return "index";
+        return "redirect:/index";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "index";
+        return "redirect:/index";
     }
 
+    @CrossOrigin(origins = "*")
     @ViewerCount
     @GetMapping("/index")
     public String index(Pageable pageable, Model model) {

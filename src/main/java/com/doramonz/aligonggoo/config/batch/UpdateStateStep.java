@@ -1,6 +1,5 @@
 package com.doramonz.aligonggoo.config.batch;
 
-import com.doramonz.aligonggoo.util.AliProductUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Step;
@@ -24,17 +23,16 @@ public class UpdateStateStep {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
     private final DataSource dataSource;
-    private final AliProductUtil aliProductUtil;
 
-    @JobScope
-    public Step updateStateStep() {
-        return new StepBuilder("updateStateStep", jobRepository)
-                .<ProductGongGooBatchDao, Integer>chunk(10, transactionManager)
-                .reader(reader())
-                .processor(new ProductGongGooUpdateStateProcessor(aliProductUtil))
-                .writer(writer())
-                .build();
-    }
+//    @JobScope
+//    public Step updateStateStep() {
+//        return new StepBuilder("updateStateStep", jobRepository)
+//                .<ProductGongGooBatchDao, Integer>chunk(10, transactionManager)
+//                .reader(reader())
+//                .processor(new ProductGongGooUpdateStateProcessor(aliProductUtil))
+//                .writer(writer())
+//                .build();
+//    }
 
     @StepScope
     public ItemReader<ProductGongGooBatchDao> reader() {

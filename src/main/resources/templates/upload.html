@@ -1,0 +1,31 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+<th:block layout:fragment="content">
+    <form>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>공구 등록</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="uri">공구 링크</label>
+                        <input type="text" class="form-control" id="uri" name="uri" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="gongGooSubmit">등록하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script src="/js/upload.js"></script>
+</th:block>
+</html>
