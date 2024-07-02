@@ -16,6 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Optional<Product> findByName(String name);
 
-    @Query("select new com.doramonz.aligonggoo.dto.ProductResponse(p.id, p.name, p.image) from Product p RIGHT join ProductGongGoo pg on p.id = pg.product.id where pg.status = true and pg.product != null group by p.id order by max(pg.created) desc")
+    @Query("select new com.doramonz.aligonggoo.dto.ProductResponse(p.id, p.name, p.image) from Product p join ProductGongGoo pg on p.id = pg.product.id where pg.status = true group by p.id order by max(pg.created) desc")
     Page<ProductResponse> getOpenedProductGongGooListRecent(Pageable pageable);
 }

@@ -27,7 +27,6 @@ public class DefaultController {
         return "redirect:/index";
     }
 
-    @CrossOrigin(origins = "*")
     @ViewerCount
     @GetMapping("/index")
     public String index(Pageable pageable, Model model) {
