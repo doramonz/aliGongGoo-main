@@ -155,7 +155,6 @@ public class DefaultProductService implements ProductService {
     @Override
     public DefaultResponse<ProductResponse> getRecentProduct(Pageable pageable) {
         Page<ProductResponse> products = productRepository.getOpenedProductGongGooListRecent(pageable);
-        System.out.println(products.getContent());
         return DefaultResponse.<ProductResponse>builder()
                 .data(products.getContent())
                 .total(products.getTotalElements())
