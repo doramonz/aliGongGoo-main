@@ -41,7 +41,7 @@ public class ProductController {
     @ResponseBody
     @PostMapping("/api/products/upload")
     public DefaultResponse<Void> uploadProduct(@RequestParam("uri") String uri) throws DefaultError {
-        return productService.uploadProduct(SecurityContextHolder.getContext().getAuthentication().getName(), UriEncoder.decode(uri));
+        return productService.uploadGongGooURL(SecurityContextHolder.getContext().getAuthentication().getName(), UriEncoder.decode(uri));
     }
 
     @ResponseBody
