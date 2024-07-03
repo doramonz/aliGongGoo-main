@@ -1,0 +1,42 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
+<th:block layout:fragment="content">
+    <!-- Search-->
+    <div class="container-fluid full-height d-flex justify-content-center align-items-center">
+        <div class="row search-container" style="width: 100%">
+            <div class="col-12">
+                <form class="d-flex w-100" th:action="@{/products/search}" method="post">
+                    <input class="form-control flex-grow-1" type="search" placeholder="입력" aria-label="Search"
+                           id="search-input" name="name" required/>
+                    <button class="btn btn-outline-success ml-2" type="submit" id="search-button">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="col mb-5" th:each="product : ${products}">
+                    <div class="card h-100">
+                        <img class="card-img-top" th:src="${product.image}" alt="..."/>
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder" th:text="${product.name}"></h5>
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <button class="btn btn-outline-dark mt-auto getUri_button"
+                                    th:attr="productId=${product.id}">공구 조회
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="/js/index.js"></script>
+</th:block>
+</html>
