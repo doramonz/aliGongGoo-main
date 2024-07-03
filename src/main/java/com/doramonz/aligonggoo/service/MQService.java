@@ -1,7 +1,5 @@
 package com.doramonz.aligonggoo.service;
 
-import com.doramonz.aligonggoo.dto.AliProductInfo;
-import com.doramonz.aligonggoo.dto.CrawlerErrorDto;
 import com.doramonz.aligonggoo.dto.URLParsingDto;
 import com.doramonz.aligonggoo.mq.OutputQueue;
 import lombok.RequiredArgsConstructor;

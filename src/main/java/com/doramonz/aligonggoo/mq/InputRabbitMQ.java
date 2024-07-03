@@ -34,8 +34,8 @@ public class InputRabbitMQ implements InputQueue {
             log.error("Error stack trace: {}", errorDto.getStackTrace());
             log.error("Error time: {}", errorDto.getTime());
         } else if (errorDto.getErrorType().equals(CrawlerErrorDto.ErrorType.RESTART)) {
-            awsInstanceController.restartInstance(errorDto.getInstanceId());
             log.info("Restarted instance: {}", errorDto.getInstanceId());
+            awsInstanceController.restartInstance(errorDto.getInstanceId());
         } else if (errorDto.getErrorType().equals(CrawlerErrorDto.ErrorType.NOT_AVAILABLE)) {
             log.info("Removed URL from available list: {}", errorDto.getUrl());
             productService.closeGongGoo(errorDto.getUrl());
