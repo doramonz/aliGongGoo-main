@@ -32,6 +32,7 @@ public class UpdateStateStep {
                 .<ProductGongGooBatchDao, Integer>chunk(10, transactionManager)
                 .reader(reader())
                 .processor(new ProductGongGooUpdateStateProcessor(mqService))
+                .writer(writer())
                 .build();
     }
 
@@ -44,15 +45,15 @@ public class UpdateStateStep {
         return reader;
     }
 
-//    @StepScope
-//    public ItemWriter<Integer> writer() {
-//        return items -> {
-//            for (Integer item : items) {
-//                if (item != null) {
-//                    log.debug("Close Expired ProductGongGooBatchDao. id: {}", item);
-//                    dataSource.getConnection().prepareStatement("UPDATE product_gongGoo SET gongGoo_status = 0 WHERE product_gongGoo_id = " + item).execute();
-//                }
-//            }
-//        };
-//    }
+    @StepScope
+    public ItemWriter<Integer> writer() {
+        return items -> {
+            for (Integer item : items) {
+                if (item != null) {
+                    log.debug("Close Expired ProductGongGooBatchDao. id: {}", item);
+                    dataSource.getConnection().prepareStatement("UPDATE product_gongGoo SET gongGoo_status = 0 WHERE product_gongGoo_id = " + item).execute();
+                }
+            }
+        };
+    }
 }

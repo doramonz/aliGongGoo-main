@@ -21,12 +21,7 @@ public class ProductGongGooUpdateStateProcessor implements ItemProcessor<Product
             return item.getId();
         }
 
-        try {
-            mqService.processURL(new URLParsingDto(item.getUrl()));
-        } catch (Exception e) {
-            log.debug("Failed to get product info. id: {}", item.getId(), e);
-            return item.getId();
-        }
+        mqService.processURL(new URLParsingDto(item.getUrl()));
         return null;
     }
 }
