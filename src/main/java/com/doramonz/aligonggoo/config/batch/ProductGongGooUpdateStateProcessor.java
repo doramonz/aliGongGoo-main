@@ -1,5 +1,7 @@
 package com.doramonz.aligonggoo.config.batch;
 
+import com.doramonz.aligonggoo.dto.URLParsingDto;
+import com.doramonz.aligonggoo.service.MQService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class ProductGongGooUpdateStateProcessor implements ItemProcessor<ProductGongGooBatchDao, Integer> {
 
+    private final MQService mqService;
+
     @Override
     public Integer process(ProductGongGooBatchDao item) throws Exception {
         if (item.getCreated().plusDays(1).isBefore(LocalDateTime.now())) {
@@ -18,7 +22,7 @@ public class ProductGongGooUpdateStateProcessor implements ItemProcessor<Product
         }
 
         try {
-//            aliProductUtil.getProductInfo(item.getUrl());
+            mqService.processURL(new URLParsingDto(item.getUrl()));
         } catch (Exception e) {
             log.debug("Failed to get product info. id: {}", item.getId(), e);
             return item.getId();

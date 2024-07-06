@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class JobConfig {
 
@@ -20,18 +20,18 @@ public class JobConfig {
     private final UpdateStateStep updateStateStep;
     private final JobLauncher jobLauncher;
 
-//    @Bean(name = "productGongGooJob")
-//    public Job productGongGooJob() {
-//        return new JobBuilder("productGongGooJob", jobRepository)
-//                .start(updateStateStep.updateStateStep())
-//                .build();
-//    }
+    @Bean(name = "productGongGooJob")
+    public Job productGongGooJob() {
+        return new JobBuilder("productGongGooJob", jobRepository)
+                .start(updateStateStep.updateStateStep())
+                .build();
+    }
 
-//    @Scheduled(fixedDelay = 10 * 60 * 1000)
-//    public void runProductGongGooJob() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-//        JobParameters jobParameter = new JobParametersBuilder()
-//                .addString("productGongGooJob", String.valueOf(System.currentTimeMillis()))
-//                .toJobParameters();
-//        jobLauncher.run(productGongGooJob(), jobParameter);
-//    }
+    @Scheduled(fixedDelay = 60 * 60 * 1000)
+    public void runProductGongGooJob() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        JobParameters jobParameter = new JobParametersBuilder()
+                .addString("productGongGooJob", String.valueOf(System.currentTimeMillis()))
+                .toJobParameters();
+        jobLauncher.run(productGongGooJob(), jobParameter);
+    }
 }
